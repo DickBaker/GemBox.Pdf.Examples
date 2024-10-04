@@ -1,4 +1,5 @@
 using System.IO;
+using ChartsBarcodes;
 using GemBox.Document;
 using GemBox.Pdf;
 using GemBox.Pdf.Content;
@@ -6,18 +7,11 @@ using GemBox.Presentation;
 using GemBox.Spreadsheet;
 using GemBox.Spreadsheet.Charts;
 
-namespace ChartsBarcodes;
-
-static class Program
-{
-    static void Main()
-    {
-        Example1();
+Example1();
         Example2();
         Example3();
-    }
 
-    static void Example1()
+    void Example1()
     {
         // If using the Professional version, put your GemBox.Pdf serial key below.
         GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
@@ -50,7 +44,7 @@ static class Program
         document.Save("Chart.pdf");
     }
 
-    static ExcelChart CreateChart(double width, double height)
+    ExcelChart CreateChart(double width, double height)
     {
         var workbook = new ExcelFile();
         ExcelWorksheet worksheet = workbook.Worksheets.Add("Chart");
@@ -76,7 +70,7 @@ static class Program
         return chart;
     }
 
-    static void Example2()
+    void Example2()
     {
         // If using the Professional version, put your GemBox.Pdf serial key below.
         GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
@@ -109,7 +103,7 @@ static class Program
         document.Save("Barcode.pdf");
     }
 
-    static GemBox.Document.TextBox CreateBarcode(string qrCode)
+    GemBox.Document.TextBox CreateBarcode(string qrCode)
     {
         var document = new DocumentModel();
         document.DefaultParagraphFormat.SpaceAfter = 0;
@@ -133,7 +127,7 @@ static class Program
         return textBox;
     }
 
-    static void Example3()
+    void Example3()
     {
         // If using the Professional version, put your GemBox.Pdf serial key below.
         GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
@@ -166,7 +160,7 @@ static class Program
         document.Save("Shapes.pdf");
     }
 
-    static PresentationDocument CreateShapes()
+    PresentationDocument CreateShapes()
     {
         var presentation = new PresentationDocument();
         Slide slide = presentation.Slides.AddNew(SlideLayoutType.Custom);
@@ -188,18 +182,20 @@ static class Program
 
         return presentation;
     }
-}
 
-public static class PdfDocumentExtension
+namespace ChartsBarcodes
 {
-    public static PdfFormContent AppendPage(this PdfDocument destination, PdfDocument source,
-        int sourcePageIndex, int destinationPageIndex, PdfPoint destinationBottomLeft)
+    public static class PdfDocumentExtension
     {
-        PdfForm form = source.Pages[sourcePageIndex].ConvertToForm(destination);
-        PdfContentGroup group = destination.Pages[destinationPageIndex].Content.Elements.AddGroup();
+        public static PdfFormContent AppendPage(this PdfDocument destination, PdfDocument source,
+            int sourcePageIndex, int destinationPageIndex, PdfPoint destinationBottomLeft)
+        {
+            PdfForm form = source.Pages[sourcePageIndex].ConvertToForm(destination);
+            PdfContentGroup group = destination.Pages[destinationPageIndex].Content.Elements.AddGroup();
 
-        PdfFormContent formContent = group.Elements.AddForm(form);
-        formContent.Transform = PdfMatrix.CreateTranslation(destinationBottomLeft.X, destinationBottomLeft.Y);
-        return formContent;
+            PdfFormContent formContent = group.Elements.AddForm(form);
+            formContent.Transform = PdfMatrix.CreateTranslation(destinationBottomLeft.X, destinationBottomLeft.Y);
+            return formContent;
+        }
     }
 }

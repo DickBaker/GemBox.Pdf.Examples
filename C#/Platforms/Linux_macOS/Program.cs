@@ -1,21 +1,13 @@
 using GemBox.Pdf;
 
-namespace Linux_macOS;
+// If using the Professional version, put your serial key below.
+ComponentInfo.SetLicense("FREE-LIMITED-KEY");
 
-static class Program
-{
-    static void Main()
-    {
-        // If using the Professional version, put your serial key below.
-        ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+using var document = new PdfDocument();
+// Add a first empty page.
+_ = document.Pages.Add();
 
-        using var document = new PdfDocument();
-        // Add a first empty page.
-        _ = document.Pages.Add();
+// Add a second empty page.
+_ = document.Pages.Add();
 
-        // Add a second empty page.
-        _ = document.Pages.Add();
-
-        document.Save("Output.pdf");
-    }
-}
+document.Save("Output.pdf");
